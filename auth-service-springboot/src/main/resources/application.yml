@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://testuser:test1234@localhost:27017/authdb?authSource=admin
+      auto-index-creation: true
+  jpa:
+    hibernate:
+      ddl-auto: none  # Disable JPA since we're using MongoDB
+
+# MongoDB specific settings
+logging:
+  level:
+    org.springframework.data.mongodb: DEBUG
+
+
+# JWT settings
+# 1 min for access token, 1 day for refresh token
+jwt:
+  access-token:
+    expiration: ${JWT_ACCESS_TOKEN_EXPIRATION:120000}
+  refresh-token:
+    expiration: ${JWT_REFRESH_TOKEN_EXPIRATION:86400000}
+  keys:
+    # For development: use file paths
+    private-key-path: ${JWT_PRIVATE_KEY_PATH:classpath:keys/private_key_pkcs8.pem}
+    public-key-path: ${JWT_PUBLIC_KEY_PATH:classpath:keys/public_key.pem}
+    # For production: use base64 encoded keys
+    private-key: ${JWT_PRIVATE_KEY:}
+    public-key: ${JWT_PUBLIC_KEY:}

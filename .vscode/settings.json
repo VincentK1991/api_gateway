@@ -1,0 +1,41 @@
+{
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": "explicit",
+            "source.organizeImports.ruff": "explicit"
+        }
+    },
+
+    // Disable other Python tools to avoid conflicts
+    "python.formatting.provider": "none",
+    "python.analysis.autoImportCompletions": false,
+    "autopep8.args": [],
+    "autopep8.enabled": false,
+    "pylance.inlayHints.functionReturnTypes": false,
+
+    // Explicitly disable other formatters
+    "python.formatting.autopep8Args": [],
+    "python.formatting.blackArgs": [],
+    "python.formatting.yapfArgs": [],
+
+    // Python interpreter
+    "python.defaultInterpreterPath": "./backend/.venv/bin/python",
+
+    // Ruff extension settings (these are the correct modern settings)
+    "ruff.enable": true,
+    "ruff.lint.enable": true,
+    "ruff.lint.preview": true,
+    "ruff.organizeImports": true,
+    "ruff.configuration": "./backend/pyproject.toml",
+    "ruff.cwd": "./backend",
+
+    // General editor settings
+    "editor.rulers": [88],
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "editor.formatOnSaveMode": "file",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic"
+}

@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.pyc
+.env
+venv/
+.venv/
+**/.venv/
+*.ipynb
+
+# Node
+node_modules/
+dist/
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+**/node_modules/
+**/dist/
+**/build/
+**/dist.zip
+**/dist.tar.gz
+**/dist.tar.bz2
+**/dist.tar.xz
+**/dist.tar.lzma
+**/dist.tar.lz
+databases/neo4j/data
+databases/neo4j/logs
+databases/neo4j/import
+databases/neo4j/plugins
+
+**/*.pdf
+
+**/src/main/resources/keys/
