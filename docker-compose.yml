@@ -1,5 +1,6 @@
 version: '3.8'
 services:
+  # Database services
   mongodb:
     image: mongo:latest
     container_name: mongodb
@@ -10,7 +11,35 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=testuser
       - MONGO_INITDB_ROOT_PASSWORD=test1234
+    networks:
+      - api-network
+
+  # Kong API Gateway (DB-less mode)
+  kong:
+    image: kong/kong-gateway:3.4.2
+    container_name: kong
+    environment:
+      - KONG_DATABASE=off
+      - KONG_PROXY_ACCESS_LOG=/dev/stdout
+      - KONG_ADMIN_ACCESS_LOG=/dev/stdout
+      - KONG_PROXY_ERROR_LOG=/dev/stderr
+      - KONG_ADMIN_ERROR_LOG=/dev/stderr
+      - KONG_ADMIN_LISTEN=0.0.0.0:8001
+      - KONG_ADMIN_GUI_URL=http://localhost:8002
+      - KONG_DECLARATIVE_CONFIG=/kong/declarative/kong.yml
+    volumes:
+      - ./api-gateway-kong/kong.yml:/kong/declarative/kong.yml
+    ports:
+      - "8000:8000"  # Kong proxy port
+      - "8001:8001"  # Kong admin API port
+      - "8002:8002"  # Kong manager GUI port
+    networks:
+      - api-network
 
 volumes:
   mongodb_data:
     driver: local
+
+networks:
+  api-network:
+    driver: bridge

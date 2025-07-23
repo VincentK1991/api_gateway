@@ -14,6 +14,7 @@ spring:
 logging:
   level:
     org.springframework.data.mongodb: DEBUG
+    com.example.authservice.config: DEBUG
 
 
 # JWT settings

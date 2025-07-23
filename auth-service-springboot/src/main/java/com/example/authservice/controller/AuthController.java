@@ -41,7 +41,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-        System.out.println("about to login user");
         try {
             User user = userService.authenticateUser(loginRequest);
 
@@ -60,10 +59,8 @@ public class AuthController {
                 user.getFirstName(),
                 user.getLastName()
             );
-            System.out.println("login successful");
             return ResponseEntity.ok(loginResponse);
         } catch (RuntimeException e) {
-            System.out.println("login failed");
             return ResponseEntity.badRequest().body(new LoginResponse(e.getMessage(), null, null, null, null));
         }
     }
@@ -78,10 +75,8 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(@CookieValue(value = "refreshToken", required = false) String refreshToken,
     HttpServletResponse response) {
-        System.out.println("about to refresh token");
         try {
             if (refreshToken == null || !jwtService.validateRefreshToken(refreshToken)) {
-                System.out.println("refresh token is null or invalid");
                 return ResponseEntity.badRequest().body(new LoginResponse("Invalid refresh token", null, null, null, null));
             }
 
@@ -101,7 +96,6 @@ public class AuthController {
                 user.getFirstName(),
                 user.getLastName()
             );
-            System.out.println("refresh token successful");
             return ResponseEntity.ok(loginResponse);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(new LoginResponse(e.getMessage(), null, null, null, null));

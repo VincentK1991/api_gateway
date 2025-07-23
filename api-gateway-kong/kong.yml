@@ -1,0 +1,115 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+  # Auth Service (Spring Boot) - running locally
+  - name: auth-service
+    url: http://host.docker.internal:8080
+    tags:
+      - auth
+
+  # Message Service (FastAPI) - running locally
+  # note: this is when Kong is running in docker
+  # the host.docker.internal is the host of the docker container
+  # this should resolve to the host of the docker container (localhost)
+  - name: message-service
+    url: http://host.docker.internal:8081
+    tags:
+      - messages
+    plugins:
+      - name: jwt
+        config:
+          cookie_names:
+            - accessToken
+          claims_to_verify:
+            - exp    # Ensure token hasn't expired
+            - sub    # Ensure user ID exists
+          run_on_preflight: false  # Allow CORS preflight without JWT
+          claims_to_headers:
+            - claim: sub
+              header: X-User-ID
+            - claim: email
+              header: X-User-Email
+
+routes:
+  # Auth service routes - single wildcard route
+  - name: auth-service-routes
+    service: auth-service
+    paths:
+      - /api/auth
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+    strip_path: false
+
+  # Message service routes (protected)
+  - name: message-endpoint
+    service: message-service
+    paths:
+      - /api/message
+    methods:
+      - POST
+    strip_path: false
+
+  - name: health-routes
+    service: message-service
+    paths:
+      - /api/health
+      - /api/health/user_info
+    methods:
+      - GET
+    strip_path: false
+
+consumers:
+  - username: auth-service-consumer
+    jwt_secrets:
+      - key: default-jwt-key
+        rsa_public_key: |
+          -----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuLBHOfiKS2DamhL5GWG6
+Mot72ZdhMiDMH5JJFM/DTJzZvLhRnwDJi06flgHBnQWC0CzvqQDjyH+YZV5ogxqC
+nO3lEXirACFyQ7lN8/9CC4FnMqJWTZwGa96kRA/6LIO9UjZT0hCrDvlOSFozm/UR
+766Wo0s9iOFdC1Rf6eB7A+X7nsuKUIrvYzvmcuX+MiLSU3Dd9zMlBcEejgKn++FD
+Y9lTsDiGmwwk2CEdzMWzjjjh4286sgIHYbvGKNG6q5ybpnjibv3sSMrSQE1WtpFG
+1htSiTgMO5k/m692eUHrneteHtUt5waAACwqOP/yiB+yMxUA8qDhwJKXJk00oOZg
+cwIDAQAB
+          -----END PUBLIC KEY-----
+        algorithm: RS256
+
+plugins:
+  # Global rate limiting
+  - name: rate-limiting
+    config:
+      minute: 100
+      hour: 1000
+      policy: local
+
+  # CORS support
+  - name: cors
+    config:
+      origins:
+        - "*"
+      methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      headers:
+        - Accept
+        - Accept-Version
+        - Content-Length
+        - Content-MD5
+        - Content-Type
+        - Date
+        - X-Auth-Token
+        - X-User-ID
+        - X-User-Email
+        - X-User-Role
+        - Authorization
+      exposed_headers:
+        - X-Auth-Token
+      credentials: true
+      max_age: 3600
