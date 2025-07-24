@@ -1,5 +1,6 @@
 server:
   port: 8080
+  address: 0.0.0.0
 
 spring:
   data:
@@ -20,8 +21,9 @@ logging:
 # JWT settings
 # 1 min for access token, 1 day for refresh token
 jwt:
+  issuer: ${JWT_ISSUER:auth-service}  # JWT issuer claim
   access-token:
-    expiration: ${JWT_ACCESS_TOKEN_EXPIRATION:120000}
+    expiration: ${JWT_ACCESS_TOKEN_EXPIRATION:86400000}
   refresh-token:
     expiration: ${JWT_REFRESH_TOKEN_EXPIRATION:86400000}
   keys:

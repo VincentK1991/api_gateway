@@ -120,6 +120,7 @@ public class JwtService {
         return Jwts.builder()
             .claims(claims)
             .subject(subject)
+            .issuer(jwtConfig.getIssuer())  // Add issuer claim
             .issuedAt(now)
             .expiration(expiryDate)
             .signWith(privateKey)

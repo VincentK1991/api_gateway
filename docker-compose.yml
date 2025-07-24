@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   # Database services
   mongodb:
@@ -16,8 +15,10 @@ services:
 
   # Kong API Gateway (DB-less mode)
   kong:
-    image: kong/kong-gateway:3.4.2
+    image: kong:3.4.2
     container_name: kong
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       - KONG_DATABASE=off
       - KONG_PROXY_ACCESS_LOG=/dev/stdout
@@ -25,14 +26,23 @@ services:
       - KONG_PROXY_ERROR_LOG=/dev/stderr
       - KONG_ADMIN_ERROR_LOG=/dev/stderr
       - KONG_ADMIN_LISTEN=0.0.0.0:8001
-      - KONG_ADMIN_GUI_URL=http://localhost:8002
       - KONG_DECLARATIVE_CONFIG=/kong/declarative/kong.yml
+      - KONG_PLUGINS=bundled,jwt,cors,rate-limiting,request-transformer,jwt-claims-headers
+      - KONG_LUA_PACKAGE_PATH=/kong/plugins/?.lua;;
+      - KONG_LOG_LEVEL=debug
     volumes:
-      - ./api-gateway-kong/kong.yml:/kong/declarative/kong.yml
+      - ./api-gateway-kong/kong.yml:/kong/declarative/kong.yml:ro
+      - ./kong-plugins:/kong/plugins:ro
     ports:
       - "8000:8000"  # Kong proxy port
       - "8001:8001"  # Kong admin API port
-      - "8002:8002"  # Kong manager GUI port
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
     networks:
       - api-network
 

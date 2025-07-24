@@ -75,15 +75,7 @@ consumers:
     jwt_secrets:
       - key: auth-service  # Must match JWT issuer claim
         rsa_public_key: |
-          -----BEGIN PUBLIC KEY-----
-          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuLBHOfiKS2DamhL5GWG6
-          Mot72ZdhMiDMH5JJFM/DTJzZvLhRnwDJi06flgHBnQWC0CzvqQDjyH+YZV5ogxqC
-          nO3lEXirACFyQ7lN8/9CC4FnMqJWTZwGa96kRA/6LIO9UjZT0hCrDvlOSFozm/UR
-          766Wo0s9iOFdC1Rf6eB7A+X7nsuKUIrvYzvmcuX+MiLSU3Dd9zMlBcEejgKn++FD
-          Y9lTsDiGmwwk2CEdzMWzjjjh4286sgIHYbvGKNG6q5ybpnjibv3sSMrSQE1WtpFG
-          1htSiTgMO5k/m692eUHrneteHtUt5waAACwqOP/yiB+yMxUA8qDhwJKXJk00oOZg
-          cwIDAQAB
-          -----END PUBLIC KEY-----
+          ${JWT_PUBLIC_KEY}
         algorithm: RS256
 
 plugins:

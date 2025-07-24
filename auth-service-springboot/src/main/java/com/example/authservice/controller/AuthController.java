@@ -49,7 +49,7 @@ public class AuthController {
             String refreshToken = jwtService.generateRefreshToken(user.getIdAsString());
 
             // Set HTTP-only cookies
-            setTokenCookie(response, "accessToken", accessToken, 2 * 60); // 2 minutes
+            setTokenCookie(response, "accessToken", accessToken, 24 * 60 * 60); // 24 hours
             setTokenCookie(response, "refreshToken", refreshToken, 24 * 60 * 60); // 24 hours
 
             LoginResponse loginResponse = new LoginResponse(

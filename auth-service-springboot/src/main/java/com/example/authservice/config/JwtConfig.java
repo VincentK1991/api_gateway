@@ -7,12 +7,20 @@ import org.springframework.context.annotation.*;
 @ConfigurationProperties(prefix = "jwt")
 public class JwtConfig {
 
+    private String issuer = "auth-service";  // Default issuer
     private AccessToken accessToken = new AccessToken();
     private RefreshToken refreshToken = new RefreshToken();
     private Keys keys = new Keys();
 
 
     // getters and setters
+    public String getIssuer() {
+        return issuer;
+    }
+    public void setIssuer(String issuer) {
+        this.issuer = issuer;
+    }
+
     public AccessToken getAccessToken() {
         return accessToken;
     }
