@@ -13,6 +13,7 @@ help:
 # Setup: Generate Kong configuration from template
 setup:
 	@echo "🔧 Setting up Kong configuration..."
+	@echo "🔍 Auto-detecting service endpoints..."
 	@bash -c "source export_jwt_public_key.sh && ./generate-kong-config.sh"
 
 # Deploy Docker containers (Kong + MongoDB)

@@ -4,7 +4,7 @@ _transform: true
 services:
   # Auth Service (Spring Boot) - running locally
   - name: auth-service
-    url: http://172.23.105.163:8080
+    url: http://${AUTH_SERVICE_HOST}:${AUTH_SERVICE_PORT}
     tags:
       - auth
     plugins:
@@ -16,9 +16,9 @@ services:
 
   # Message Service (FastAPI) - running locally
   # note: this is when Kong is running in docker
-  # using the host's actual IP address that's accessible from docker containers
+  # using environment variables for flexible host configuration
   - name: message-service
-    url: http://172.23.105.163:8081
+    url: http://${MESSAGE_SERVICE_HOST}:${MESSAGE_SERVICE_PORT}
     tags:
       - messages
     plugins:

@@ -2,8 +2,15 @@
 
 # Generate kong.yml from template with environment variable substitution
 
+# Check required environment variables
 if [ -z "$JWT_PUBLIC_KEY" ]; then
     echo "Error: JWT_PUBLIC_KEY environment variable is not set"
+    echo "Please run: source export_jwt_public_key.sh"
+    exit 1
+fi
+
+if [ -z "$AUTH_SERVICE_HOST" ] || [ -z "$AUTH_SERVICE_PORT" ] || [ -z "$MESSAGE_SERVICE_HOST" ] || [ -z "$MESSAGE_SERVICE_PORT" ]; then
+    echo "Error: Service host/port environment variables are not set"
     echo "Please run: source export_jwt_public_key.sh"
     exit 1
 fi
