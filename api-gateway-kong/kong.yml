@@ -7,18 +7,12 @@ services:
     url: http://172.23.105.163:8080
     tags:
       - auth
-    plugins:
-      - name: request-transformer
-        config:
-          add:
-            headers:
-              - "Host:localhost"
 
   # Message Service (FastAPI) - running locally
   # note: this is when Kong is running in docker
-  # using the host's actual IP address that's accessible from docker containers
+  # using environment variables for flexible host configuration
   - name: message-service
-    url: http://172.23.105.163:8081
+    url: http://host.docker.internal:8081
     tags:
       - messages
     plugins:
